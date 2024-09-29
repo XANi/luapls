@@ -33,6 +33,9 @@ func (fc *FunctionCall) End() token.Pos {
 	}
 	return fc.Name.End()
 }
+func (fc *FunctionCall) Leaves() []Node {
+	return []Node{fc.Name, &fc.Args}
+}
 
 type FunctionExpression struct {
 	Function   Unit
@@ -50,6 +53,9 @@ func (fe *FunctionExpression) Pos() token.Pos {
 }
 func (fe *FunctionExpression) End() token.Pos {
 	return fe.EndUnit.End()
+}
+func (fe *FunctionExpression) Leaves() []Node {
+	return []Node{&fe.Params, &fe.Body}
 }
 
 type IndexExpression struct {
@@ -69,6 +75,9 @@ func (ie *IndexExpression) End() token.Pos {
 	}
 	return ie.Inner.End()
 }
+func (ie *IndexExpression) Leaves() []Node {
+	return []Node{ie.Prefix, ie.Inner}
+}
 
 type InfixExpression struct {
 	Left     Expression
@@ -83,6 +92,9 @@ func (be *InfixExpression) Pos() token.Pos {
 func (be *InfixExpression) End() token.Pos {
 	return be.Right.End()
 }
+func (be *InfixExpression) Leaves() []Node {
+	return []Node{be.Left, be.Right}
+}
 
 type PrefixExpression struct {
 	Operator Unit
@@ -95,6 +107,9 @@ func (pe *PrefixExpression) Pos() token.Pos {
 }
 func (pe *PrefixExpression) End() token.Pos {
 	return pe.Right.End()
+}
+func (pe *PrefixExpression) Leaves() []Node {
+	return []Node{pe.Right}
 }
 
 // Literals (also expressions)
@@ -110,6 +125,10 @@ func (bl *BooleanLiteral) End() token.Pos {
 }
 func (bl *BooleanLiteral) leaf() {}
 
+func (bl *BooleanLiteral) Leaves() (n []Node) {
+	return
+}
+
 type Identifier Unit
 
 func (i *Identifier) expressionNode() {}
@@ -121,6 +140,10 @@ func (i *Identifier) End() token.Pos {
 }
 func (i *Identifier) leaf() {}
 
+func (i *Identifier) Leaves() (n []Node) {
+	return
+}
+
 type NilLiteral Unit
 
 func (i *NilLiteral) expressionNode() {}
@@ -129,6 +152,9 @@ func (i *NilLiteral) Pos() token.Pos {
 }
 func (i *NilLiteral) End() token.Pos {
 	return i.Token.End()
+}
+func (i *NilLiteral) Leaves() (n []Node) {
+	return
 }
 func (n *NilLiteral) leaf() {}
 
@@ -141,6 +167,9 @@ func (nl *NumberLiteral) Pos() token.Pos {
 func (nl *NumberLiteral) End() token.Pos {
 	return nl.Token.End()
 }
+func (i *NumberLiteral) Leaves() (n []Node) {
+	return
+}
 func (nl *NumberLiteral) leaf() {}
 
 type StringLiteral Unit
@@ -151,6 +180,9 @@ func (sl *StringLiteral) Pos() token.Pos {
 }
 func (sl *StringLiteral) End() token.Pos {
 	return sl.Token.End()
+}
+func (sl *StringLiteral) Leaves() (n []Node) {
+	return
 }
 func (sl *StringLiteral) leaf() {}
 
@@ -167,6 +199,9 @@ func (tl *TableLiteral) Pos() token.Pos {
 func (tl *TableLiteral) End() token.Pos {
 	return tl.RightBrace.End()
 }
+func (tl *TableLiteral) Leaves() []Node {
+	return []Node{&tl.Fields}
+}
 
 type Vararg Unit
 
@@ -176,5 +211,8 @@ func (va *Vararg) Pos() token.Pos {
 }
 func (va *Vararg) End() token.Pos {
 	return va.Token.End()
+}
+func (va *Vararg) Leaves() (n []Node) {
+	return
 }
 func (va *Vararg) leaf() {}

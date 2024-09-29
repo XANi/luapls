@@ -18,6 +18,9 @@ func (taf *TableArrayField) Pos() token.Pos {
 func (taf *TableArrayField) End() token.Pos {
 	return taf.Expr.End()
 }
+func (taf *TableArrayField) Leaves() (n []Node) {
+	return
+}
 
 type TableSimpleKeyField struct {
 	Name      Identifier
@@ -31,6 +34,9 @@ func (tf *TableSimpleKeyField) Pos() token.Pos {
 }
 func (tf *TableSimpleKeyField) End() token.Pos {
 	return tf.Expr.End()
+}
+func (tf *TableSimpleKeyField) Leaves() (n []Node) {
+	return
 }
 
 type TableExpressionKeyField struct {
@@ -47,4 +53,7 @@ func (tf *TableExpressionKeyField) Pos() token.Pos {
 }
 func (tf *TableExpressionKeyField) End() token.Pos {
 	return tf.Expr.End()
+}
+func (tf *TableExpressionKeyField) Leaves() (n []Node) {
+	return
 }

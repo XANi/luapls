@@ -36,6 +36,13 @@ func (p *Punctuated[T]) String() string {
 	return out
 }
 
+func (p *Punctuated[T]) Leaves() (n []Node) {
+	for i := 0; i < len(p.Pairs); i++ {
+		n = append(n, &p.Pairs[i])
+	}
+	return n
+}
+
 type Pair[T Node] struct {
 	Node      T
 	Delimeter *Unit // Optional
@@ -58,4 +65,8 @@ func (p *Pair[T]) String() string {
 		out += p.Delimeter.String()
 	}
 	return out
+}
+
+func (p *Pair[T]) Leaves() []Node {
+	return []Node{p.Node}
 }

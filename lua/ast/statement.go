@@ -22,6 +22,9 @@ func (as *AssignmentStatement) Pos() token.Pos {
 func (as *AssignmentStatement) End() token.Pos {
 	return as.Exps.End()
 }
+func (as *AssignmentStatement) Leaves() []Node {
+	return []Node{&as.Vars, &as.Exps}
+}
 
 type BreakStatement Unit
 
@@ -31,6 +34,9 @@ func (bs *BreakStatement) Pos() token.Pos {
 }
 func (bs *BreakStatement) End() token.Pos {
 	return bs.Token.End()
+}
+func (bs *BreakStatement) Leaves() (n []Node) {
+	return n
 }
 
 type DoStatement struct {
@@ -45,6 +51,9 @@ func (ds *DoStatement) Pos() token.Pos {
 }
 func (ds *DoStatement) End() token.Pos {
 	return ds.EndTok.End()
+}
+func (bs *DoStatement) Leaves() (n []Node) {
+	return n
 }
 
 type ForStatement struct {
@@ -66,6 +75,9 @@ func (fs *ForStatement) Pos() token.Pos {
 func (fs *ForStatement) End() token.Pos {
 	return fs.EndTok.End()
 }
+func (bs *ForStatement) Leaves() (n []Node) {
+	return n
+}
 
 type ForInStatement struct {
 	ForTok Unit
@@ -83,6 +95,10 @@ func (fs *ForInStatement) Pos() token.Pos {
 }
 func (fs *ForInStatement) End() token.Pos {
 	return fs.EndTok.End()
+}
+
+func (fs *ForInStatement) Leaves() []Node {
+	return []Node{&fs.Names, &fs.Exps, &fs.Body}
 }
 
 type FunctionStatement struct {
@@ -107,6 +123,9 @@ func (fs *FunctionStatement) Pos() token.Pos {
 func (fs *FunctionStatement) End() token.Pos {
 	return fs.EndTok.End()
 }
+func (fs *FunctionStatement) Leaves() []Node {
+	return []Node{fs.Name, &fs.Params, &fs.Body}
+}
 
 type GotoStatement struct {
 	GotoTok Unit
@@ -119,6 +138,9 @@ func (gs *GotoStatement) Pos() token.Pos {
 }
 func (gs *GotoStatement) End() token.Pos {
 	return gs.Name.End()
+}
+func (gs *GotoStatement) Leaves() []Node {
+	return []Node{gs.Name}
 }
 
 type IfStatement struct {
@@ -133,6 +155,12 @@ func (is *IfStatement) Pos() token.Pos {
 }
 func (is *IfStatement) End() token.Pos {
 	return is.EndTok.Pos()
+}
+func (is *IfStatement) Leaves() (n []Node) {
+	for _, i := range is.Clauses {
+		n = append(n, i.Leaves()...)
+	}
+	return n
 }
 
 type IfClause struct {
@@ -149,6 +177,9 @@ func (ic *IfClause) Pos() token.Pos {
 func (ic *IfClause) End() token.Pos {
 	return ic.Body.End()
 }
+func (ic *IfClause) Leaves() []Node {
+	return []Node{ic.Condition, &ic.Body}
+}
 
 type LabelStatement struct {
 	LeadingLabelTok  Unit
@@ -162,6 +193,9 @@ func (ls *LabelStatement) Pos() token.Pos {
 }
 func (ls *LabelStatement) End() token.Pos {
 	return ls.TrailingLabelTok.End()
+}
+func (ls *LabelStatement) Leaves() (n []Node) {
+	return
 }
 func (ls *LabelStatement) leaf() {}
 
@@ -185,6 +219,9 @@ func (ls *LocalStatement) End() token.Pos {
 	}
 	return ls.Names.End()
 }
+func (ls *LocalStatement) Leaves() []Node {
+	return []Node{&ls.Names, ls.Exps}
+}
 
 type RepeatStatement struct {
 	RepeatTok Unit
@@ -199,6 +236,9 @@ func (rs *RepeatStatement) Pos() token.Pos {
 }
 func (rs *RepeatStatement) End() token.Pos {
 	return rs.Condition.End()
+}
+func (rs *RepeatStatement) Leaves() []Node {
+	return []Node{&rs.Body, rs.Condition}
 }
 
 type ReturnStatement struct {
@@ -216,6 +256,9 @@ func (rs *ReturnStatement) End() token.Pos {
 	}
 	return rs.ReturnTok.End()
 }
+func (rs *ReturnStatement) Leaves() []Node {
+	return []Node{rs.Exps}
+}
 
 type SemicolonStatement Unit
 
@@ -225,6 +268,9 @@ func (ss *SemicolonStatement) Pos() token.Pos {
 }
 func (ss *SemicolonStatement) End() token.Pos {
 	return ss.Token.End()
+}
+func (ss *SemicolonStatement) Leaves() (n []Node) {
+	return
 }
 
 type WhileStatement struct {
@@ -241,4 +287,7 @@ func (ws *WhileStatement) Pos() token.Pos {
 }
 func (ws *WhileStatement) End() token.Pos {
 	return ws.EndTok.End()
+}
+func (ws *WhileStatement) Leaves() []Node {
+	return []Node{ws.Condition, &ws.Body}
 }

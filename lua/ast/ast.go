@@ -8,6 +8,7 @@ type Node interface {
 	Pos() token.Pos
 	End() token.Pos
 	String() string
+	Leaves() []Node
 }
 
 func Range(n Node) token.Range {
@@ -53,6 +54,9 @@ func (i *Invalid) Pos() token.Pos {
 }
 func (i *Invalid) End() token.Pos {
 	return i.Position
+}
+func (i *Invalid) Leaves() (n []Node) {
+	return
 }
 
 // A Leaf node has no children and is interactable in the editor.
